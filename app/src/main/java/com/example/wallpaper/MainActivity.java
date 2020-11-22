@@ -1,10 +1,12 @@
 package com.example.wallpaper;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.AbsListView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
      RecyclerView recyclerView;
      WallpaperAdapter wallpaperAdapter;
      List<WallpaperModel> wallpaperModelList;
+
+     int pageNumber = 1;
+
+     Boolean isScrolling = false;
+     int currentItems, totalItem,scrollOutItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,19 +43,41 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclearView);
         wallpaperModelList = new ArrayList<>();
         wallpaperAdapter = new WallpaperAdapter(this,wallpaperModelList);
-
-
         recyclerView.setAdapter(wallpaperAdapter);
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(gridLayoutManager);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+               currentItems = gridLayoutManager.getChildCount();
+               totalItem = gridLayoutManager.getItemCount();
+               scrollOutItem = gridLayoutManager.findFirstVisibleItemPosition();
+
+               if (isScrolling && (currentItems+scrollOutItem==totalItem)){
+                   isScrolling = false;
+                   fetchWallpaper();
+               }
+            }
+        });
 
 
         fetchWallpaper();
     }
 
     public  void  fetchWallpaper(){
-        StringRequest request = new StringRequest(Request.Method.GET, "https://api.pexels.com/v1/curated/?page=1&per_page=80",
+        StringRequest request = new StringRequest(Request.Method.GET, "https://api.pexels.com/v1/curated/?page="+pageNumber+"&per_page=80",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -77,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             wallpaperAdapter.notifyDataSetChanged();
+                            pageNumber++;
 
                         }catch (JSONException e){
 
