@@ -1,6 +1,7 @@
 package com.example.wallpaper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,15 @@ public class WallpaperAdapter  extends  RecyclerView.Adapter<WallpaperViewHolder
 
 
         Glide.with(context).load(wallpaperModelList.get(position).getMediumUrl()).into(holder.imageView);
+
+        Glide.with(context).load(wallpaperModelList.get(position).getMediumUrl()).into(holder.imageView);
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context,FullScreenWallpaper.class)
+                        .putExtra("originalUrl",wallpaperModelList.get(position).getOriginalUrl()));
+            }
+        });
 
     }
 
