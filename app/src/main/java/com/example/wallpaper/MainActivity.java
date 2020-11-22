@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         wallpaperModelList = new ArrayList<>();
         wallpaperAdapter = new WallpaperAdapter(this,wallpaperModelList);
         recyclerView.setAdapter(wallpaperAdapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
