@@ -40,7 +40,12 @@ public class WallpaperAdapter  extends  RecyclerView.Adapter<WallpaperViewHolder
 
         Glide.with(context).load(wallpaperModelList.get(position).getMediumUrl()).into(holder.imageView);
 
-        Glide.with(context).load(wallpaperModelList.get(position).getMediumUrl()).into(holder.imageView);
+        Glide.with(context)
+                .load(wallpaperModelList
+                        .get(position)
+                        .getMediumUrl())
+                .into(holder.imageView);
+
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

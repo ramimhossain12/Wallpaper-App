@@ -16,13 +16,25 @@
 
     <Button
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:layout_marginBottom="10dp"
         android:text="SET Wallpaper"
         android:id="@+id/btnSetWallpaper"
         android:layout_alignParentBottom="true"
         android:background="#03A9F4"
         android:onClick="SetWallpaper"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="Download Wallpaper"
+        android:layout_above="@id/btnSetWallpaper"
+        android:id="@+id/btnDownloadsWallpaper"
+        android:background="#03A9F4"
+        android:onClick="DownloadWallpaper"/>
 
 </RelativeLayout>

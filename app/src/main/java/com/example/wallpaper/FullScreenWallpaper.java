@@ -2,10 +2,13 @@ package com.example.wallpaper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
 import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -28,7 +31,9 @@ public class FullScreenWallpaper extends AppCompatActivity {
         Intent intent =  getIntent();
         originalUrl = intent.getStringExtra("originalUrl");
         photoView = findViewById(R.id.photoView);
-        Glide.with(this).load(originalUrl).into(photoView);
+        Glide.with(this)
+                .load(originalUrl)
+                .into(photoView);
 
     }
 
@@ -43,5 +48,15 @@ public class FullScreenWallpaper extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void DownloadWallpaper(View view) {
+
+        DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(originalUrl);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        downloadManager.enqueue(request);
+        Toast.makeText(this,"Downloading Wallpaper",Toast.LENGTH_SHORT).show();
     }
 }
