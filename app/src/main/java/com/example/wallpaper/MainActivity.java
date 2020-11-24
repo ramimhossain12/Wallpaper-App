@@ -1,12 +1,19 @@
 package com.example.wallpaper;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
      Boolean isScrolling = false;
      int currentItems, totalItem,scrollOutItem;
+    String url ="https://api.pexels.com/v1/curated/?page="+pageNumber+"&per_page=80";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public  void  fetchWallpaper(){
-        StringRequest request = new StringRequest(Request.Method.GET, "https://api.pexels.com/v1/curated/?page="+pageNumber+"&per_page=80",
+        StringRequest request = new StringRequest(Request.Method.GET,url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -129,5 +137,56 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.nav_search){
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            final EditText editText = new EditText(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+
+            alert.setMessage("Enter Category e.g. Nature");
+            alert.setTitle("Search Wallpaper");
+
+            alert.setView(editText);
+
+            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    String query = editText.getText().toString().toLowerCase();
+
+                    url = "https://api.pexels.com/v1/search/?page="+pageNumber+"&per_page=80&query="+query;
+                    wallpaperModelList.clear();
+                    fetchWallpaper();
+
+                }
+            });
+
+            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            alert.show();
+
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

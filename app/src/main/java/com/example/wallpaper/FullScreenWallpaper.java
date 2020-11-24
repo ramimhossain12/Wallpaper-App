@@ -37,6 +37,8 @@ public class FullScreenWallpaper extends AppCompatActivity {
 
     }
 
+
+
     public void SetWallpaper(View view) {
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
 

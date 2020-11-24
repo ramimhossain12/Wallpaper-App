@@ -49,5 +49,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
 
 
-    implementation 'com.squareup.retrofit:retrofit:1.7.1'
+
+
+    //lottie animation
+    implementation 'com.airbnb.android:lottie:3.3.1'
+
 }
